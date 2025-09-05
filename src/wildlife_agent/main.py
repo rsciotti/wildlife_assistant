@@ -56,7 +56,7 @@ async def get_lat_lng(ctx: RunContext[Deps], location_description: str) -> LatLn
     """
     # NOTE: the response here will be random, and is not related to the location description.
     r = await ctx.deps.client.get(
-        'https://demo-endpoints.pydantic.workers.dev/latlng',
+        get_settings().LOCATION_MCP_URL,
         params={'location': location_description},
     )
     r.raise_for_status()
@@ -75,11 +75,11 @@ async def get_weather(ctx: RunContext[Deps], lat: float, lng: float) -> dict[str
     # NOTE: the responses here will be random, and are not related to the lat and lng.
     temp_response, descr_response = await asyncio.gather(
         ctx.deps.client.get(
-            'https://demo-endpoints.pydantic.workers.dev/number',
+            get_settings().WEATHER_MCP_URL + '/number',
             params={'min': 10, 'max': 30},
         ),
         ctx.deps.client.get(
-            'https://demo-endpoints.pydantic.workers.dev/weather',
+            get_settings().WEATHER_MCP_URL +  '/weather',
             params={'lat': lat, 'lng': lng},
         ),
     )
